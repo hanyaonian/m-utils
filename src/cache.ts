@@ -13,14 +13,23 @@ export class LRUCache<K, V> {
 
   constructor(readonly capacity: number) {}
 
-  get(key: K): V | -1 {
+  get(key: K): V | null {
     if (this.map.has(key)) {
       const node = this.map.get(key)!;
       this.remove(node);
       this.toTail(node);
       return node.val;
     }
-    return -1;
+    return null;
+  }
+
+  delete(key: K): void {
+    if (this.map.has(key)) {
+      const node = this.map.get(key)!;
+      this.map.delete(node.key);
+      this.remove(node);
+      this.count -= 1;
+    }
   }
 
   put(key: K, val: V): void {
